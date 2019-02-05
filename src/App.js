@@ -29,11 +29,31 @@ class App extends Component {
   }
 
   getVehicles() {
+
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+
+    axios.get('https://joes-autos.herokuapp.com/api/vehicles').then((res) => {
+      this.setState({
+        vehiclesToDisplay: res.data
+      })
+      toast.success('yay!')
+    }).catch(error =>  {
+      toast.error('something went wrong fetching vehicles')
+    })
   }
 
   getPotentialBuyers() {
+
+    axios.get(`https://joes-autos.herokuapp.com/api/buyers`).then((res)=>{
+      console.log(res)
+      this.setState({
+        buyersToDisplay: res.data
+      })
+    }).catch(error => {
+      toast.error('something went wrong fetching buyers')
+    })
+
     // axios (GET)
     // setState with response -> buyersToDisplay
   }
@@ -41,6 +61,14 @@ class App extends Component {
   sellCar(id) {
     // axios (DELETE)
     // setState with response -> vehiclesToDisplay
+
+    axios.delete(`https://joes-autos.herokuapp.com/api/vehicles/${id}`).then((res) =>{
+      console.log(res)
+      this.setState({
+        vehiclesToDisplay: res.data.vehicles
+      })
+      
+    })
   }
 
   filterByMake() {
@@ -58,6 +86,16 @@ class App extends Component {
   }
 
   updatePrice(priceChange, id) {
+
+    axios.put(`https://joes-autos.herokuapp.com/api/vehicles/${id}/${priceChange}`).then(response =>{
+      console.log(response)
+      this.setState({
+        vehiclesToDisplay: response.data.vehicles
+      })
+      toast.success('price updated')
+    }).catch(error => {
+      toast.error('did not change price')
+    })
     // axios (PUT)
     // setState with response -> vehiclesToDisplay
   }
@@ -73,6 +111,15 @@ class App extends Component {
 
     // axios (POST)
     // setState with response -> vehiclesToDisplay
+
+    axios.post(`https://joes-autos.herokuapp.com/api/vehicles`, newCar).then(res => {
+      this.setState({
+        vehiclesToDisplay: res.data.vehicles
+      })
+      toast.success('wow unbeleivable')
+    }).catch(err => {
+      toast.error(`did not add car`)
+    })
   }
 
   addBuyer() {
